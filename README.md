@@ -1,0 +1,1 @@
+Scripts used to extract grades from the ICEV platform. Primarily to allow me to easily allow for corrections and to limit the earned points to a predefined limit.
