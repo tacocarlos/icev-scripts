@@ -2,7 +2,7 @@ import csv
 import re
 from gooey import Gooey, GooeyParser
 from pprint import pprint
-import sys
+from os import startfile
 
 def extract_grades(filePath, max_points_constraint, columnRegex):
     student_grades = {}
@@ -29,7 +29,6 @@ def extract_grades(filePath, max_points_constraint, columnRegex):
 
         for student, assignments in data.items():
             assignmentNames = list(assignments.keys())
-            print(student)
             for an in assignmentNames:
                 actual_grade, original_grade = 0,0
                 grades = assignments[an]
@@ -60,11 +59,14 @@ def extract_grades(filePath, max_points_constraint, columnRegex):
                 students.append(student_name)
         with open("extracted.csv",  mode="w") as csvfile:
             writer = csv.writer(csvfile, dialect="excel", lineterminator="\n")
-            columns = ["student", *assignments]
-            writer.writerow(["student", *assignments])
+            columns = ["student", "student_id", *assignments]
+            # columns = ["studnet", "student_id", "CU1", "CU2", "CU3"]
+            writer.writerow(["student", "student_id", *assignments])
             for student, G in zip(students, grades):
-                row = (student, *G)
+                [first, last, id] = student.split(" ")
+                row = (f"{first} {last}", id[1:-1], *G)
                 writer.writerow(row)
+        startfile("extracted.csv")
 @Gooey
 def main():
     parser = GooeyParser()
